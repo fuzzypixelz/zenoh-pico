@@ -35,7 +35,7 @@ jobs:
       branch: ${{ steps.create-release-branch.outputs.branch }}
     steps:
       - id: create-release-branch
-        uses: eclipse-zenoh/ci/create-release-branch@main
+        uses: fuzzypixelz/ci/create-release-branch@staging
         with:
           repo: ${{ github.repository }}
           live-run: ${{ inputs.live-run || false }}
@@ -149,12 +149,12 @@ jobs:
     needs: [tag, build-macos, build-linux]
     runs-on: ubuntu-latest
     steps:
-      - uses: eclipse-zenoh/ci/publish-crates-eclipse@main
+      - uses: fuzzypixelz/ci/publish-crates-eclipse@staging
         with:
           live-run: ${{ inputs.live-run || false }}
           version: ${{ needs.tag.outputs.version }}
-          ssh-host: genie.zenoh@projects-storage.eclipse.org
-          ssh-host-path: /home/data/httpd/download.eclipse.org/zenoh/zenoh-pico
+          ssh-host: root@pkgs.adlink-labs.tech
+          ssh-host-path: /root/ci-tests/data/zenoh/zenoh-pico
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
           archive-patterns: '.*\.zip'
@@ -163,7 +163,7 @@ jobs:
     needs: [tag, build-macos, build-linux]
     runs-on: ubuntu-latest
     steps:
-      - uses: eclipse-zenoh/ci/publish-crates-github@main
+      - uses: fuzzypixelz/ci/publish-crates-github@staging
         with:
           repo: ${{ github.repository }}
           live-run: ${{ inputs.live-run || false }}
